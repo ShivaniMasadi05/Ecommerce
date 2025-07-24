@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+            width: 350px;
+            height : 250px;
+        }
+        h2 {
+            text-align: center;
+            color: #00796b;
+        }
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: #00796b;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        button:hover {
+            background: #004d40;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <div class="error" id="errorMsg"></div>
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const credentials = {
+            email: email,
+            password: password
+        };
+
+        fetch("http://localhost:8080/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(credentials)
+        })
+        .then(res => res.text())
+        .then(result => {
+            if (result.includes("successful")) {
+                alert("Login successful!");
+                window.location.href = "home.html";
+            } else {
+                document.getElementById("errorMsg").textContent = "Invalid email or password";
+            }
+        })
+        .catch(err => {
+            document.getElementById("errorMsg").textContent = "Login failed. Please try again.";
+        });
+    });
+</script>
+
+</body>
+</html>
